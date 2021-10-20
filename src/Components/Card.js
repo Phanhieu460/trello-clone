@@ -12,7 +12,7 @@ const Content = styled.p`
   background: white;
 `;
 
-const Card = (props) => {
+const Card = ({ onDeleteCard, id, draggable, className, cards }) => {
   const dragStart = (e) => {
     const target = e.target;
     e.dataTransfer.setData("card_id", target.id);
@@ -24,21 +24,23 @@ const Card = (props) => {
     e.stopPropagation();
   };
   const handleClick = (data) => {
-    if (props.onDeleteCard) {
-      props.onDeleteCard(data);
+    if (onDeleteCard) {
+      onDeleteCard(data);
     }
   };
+
   return (
     <div>
-      {props.cards.map((card, index) => {
+      {console.log("cards", cards)}
+      {cards.map((card, index) => {
         return (
           <div key={card.id}>
             <Content
-              id={props.id}
+              id={id}
               onDragStart={dragStart}
               onDragOver={dragOver}
-              draggable={props.draggable}
-              className={props.className}
+              draggable={draggable}
+              className={className}
               onClick={() => handleClick(card)}
             >
               {card.text}

@@ -4,7 +4,7 @@ import Add from "./Add";
 import Card from "./Card";
 
 const Container = styled.div`
-  width: 30%;
+  width: 25%;
   min-height: 150px;
   background: lavender;
   border: 1px solid lavender;
@@ -14,10 +14,12 @@ const Container = styled.div`
   flex-direction: row;
   justify-content: space-between;
 `;
-const Title = styled.p`
-  font-size: 20px;
-  padding-left: 15px;
+const Title = styled.div`
+  width: 100%;
+  height: 50px;
+  padding: 15px;
   font-weight: bold;
+  background-color: blue;
 `;
 
 // const data = [
@@ -54,6 +56,13 @@ const List = (props) => {
   const dragOver = (e) => {
     e.preventDefault();
   };
+  useEffect(() => {
+    if (localStorage && localStorage.getItem("listData")) {
+      let listDatas = JSON.parse(localStorage.getItem("listData"));
+      console.log("listDatas", listDatas);
+      setListData(listDatas);
+    }
+  }, []);
 
   const onDeleteCard = (data) => {
     const newList = [...listData];
@@ -64,7 +73,8 @@ const List = (props) => {
     localStorage.setItem("listData", JSON.stringify(newList));
   };
   const onAdd = (data) => {
-    const newListData = [...listData, data];
+    const newListData = [...listData];
+    newListData.push(data);
     setListData(newListData);
     console.log("Listdata", ...listData);
     localStorage.setItem("listData", JSON.stringify(newListData));
@@ -79,6 +89,7 @@ const List = (props) => {
       {[listData].map((data, index) => {
         return (
           <div key={index}>
+            {console.log("data", data)}
             <Title>{props.title}</Title>
             <Card
               id="card-1"
