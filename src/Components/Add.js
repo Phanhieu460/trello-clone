@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
-const Add = ({ onAdd }) => {
+const Add = ({ onAdd, list }) => {
   const [addCard, setAddCard] = useState("");
+  const inputRef = useRef(null);
+
   const handleChange = (e) => {
     setAddCard(e.target.value);
   };
@@ -15,18 +17,50 @@ const Add = ({ onAdd }) => {
   };
 
   return (
-    <form style={{ display: "flex", marginTop: "10px" }} onSubmit={handleClick}>
+    <form style={{ display: "flex", marginTop: "10px" }}>
       <input
         type="text"
         className="form-control"
-        placeholder="Add Task"
+        placeholder="Add Card"
         name="addCard"
         value={addCard}
         onChange={handleChange}
       />
-      <button type="submit" className="btn btn-primary">
+      <button type="submit" className="btn btn-primary" onClick={handleClick}>
         +
       </button>
+
+      {/* {list ? (
+        <>
+          <input
+            placeholder="Update "
+            value={addCard}
+            onChange={handleChange}
+            name="text"
+            ref={inputRef}
+            className="todo-input edit"
+          />
+          <button className="todo-button edit">Update</button>
+        </>
+      ) : (
+        <>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Add Card"
+            name="addCard"
+            value={addCard}
+            onChange={handleChange}
+          />
+          <button
+            type="submit"
+            className="btn btn-primary"
+            onClick={handleClick}
+          >
+            +
+          </button>
+        </>
+      )} */}
     </form>
   );
 };

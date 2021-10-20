@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Add from "./Add";
 import Card from "./Card";
+import InputTask from "./InputTask";
 
 const Container = styled.div`
   width: 25%;
@@ -19,7 +20,6 @@ const Title = styled.div`
   height: 50px;
   padding: 15px;
   font-weight: bold;
-  background-color: blue;
 `;
 
 // const data = [
@@ -48,7 +48,6 @@ const List = (props) => {
   const drop = (e) => {
     e.preventDefault();
     const card_id = e.dataTransfer.getData("card_id");
-
     const card = document.getElementById(card_id);
     card.style.display = "block";
     e.target.appendChild(card);
@@ -59,7 +58,6 @@ const List = (props) => {
   useEffect(() => {
     if (localStorage && localStorage.getItem("listData")) {
       let listDatas = JSON.parse(localStorage.getItem("listData"));
-      console.log("listDatas", listDatas);
       setListData(listDatas);
     }
   }, []);
@@ -76,33 +74,46 @@ const List = (props) => {
     const newListData = [...listData];
     newListData.push(data);
     setListData(newListData);
-    console.log("Listdata", ...listData);
     localStorage.setItem("listData", JSON.stringify(newListData));
   };
+  const onUpdate = (data) => {
+    console.log(data);
+    let indexUpdate = listData.findIndex((x) => x.id === data.id);
+    if (indexUpdate !== -1) {
+      let newData = listData;
+      listData[indexUpdate] = data;
+      //console.log("Thong tin acc can update:", accountUpdate);
+      setListData(newData);
+      localStorage.setItem("listData", JSON.stringify(newData));
+    }
+  };
   return (
-    <Container
-      id={props.id}
-      onDrop={drop}
-      onDragOver={dragOver}
-      className={props.className}
-    >
-      {[listData].map((data, index) => {
-        return (
-          <div key={index}>
-            {console.log("data", data)}
-            <Title>{props.title}</Title>
-            <Card
-              id="card-1"
-              className="cardContent"
-              draggable="true"
-              cards={data}
-              onDeleteCard={onDeleteCard}
-            />
-            <Add onAdd={onAdd} />
-          </div>
-        );
-      })}
-    </Container>
+    <>
+      <Container
+        id={props.id}
+        onDrop={drop}
+        onDragOver={dragOver}
+        className={props.className}
+      >
+        {[listData].map((data, index) => {
+          return (
+            <div key={index}>
+              <Title>{props.title}</Title>
+              <Card
+                id="card-1"
+                className="cardContent"
+                draggable="true"
+                cards={data}
+                onDeleteCard={onDeleteCard}
+                onUpdate={onUpdate}
+              />
+              <Add onAdd={onAdd} list={listData} />
+            </div>
+          );
+        })}
+      </Container>
+      {/* <InputTask list={listData} /> */}
+    </>
   );
 };
 
